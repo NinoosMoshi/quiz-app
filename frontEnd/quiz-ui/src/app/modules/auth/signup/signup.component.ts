@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { SharedModule } from '../../shared/shared.module';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-signup',
@@ -19,6 +20,8 @@ export class SignupComponent {
   private fb = inject(FormBuilder);
   private message = inject(NzMessageService);
 
+  constructor(private authService:AuthService){}
+
 
   ngOnInit(){
     this.validateForm = this.fb.group({
@@ -30,7 +33,15 @@ export class SignupComponent {
 
 
   submitForm(){
-
+    this.authService.register(this.validateForm.value).subscribe({
+      next:res =>{
+        this.message.success(`Signup successfully!`, {nzDuration:5000})
+        this.router.navigateByUrl("/login")
+      },
+      error:err =>{
+        this.message.error(`${err.error}`, {nzDuration:5000})
+      }
+    })
   }
 
 
