@@ -16,5 +16,10 @@ export class AuthService {
     return this.http.post<any>(`${this.baseUrl}/sign-up`,data);
   }
 
+  login(data):Observable<any>{
+    return this.http.post<any>(`${this.baseUrl}/login`,data);
+  }
+
+
 
 }
