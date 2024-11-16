@@ -33,11 +33,11 @@ export class LoginComponent {
   submitForm(){
     this.authService.login(this.validateForm.value).subscribe({
       next:res =>{
-        this.message.success(`Login successfully!`, {nzDuration:5000})
-        this.router.navigateByUrl("/login")
+        this.message.success(`Login success.`, {nzDuration:5000})
+        
       },
       error:err =>{
-        this.message.error(`${err.error}`, {nzDuration:5000})
+        this.message.error(`Bad Credentials`, {nzDuration:5000})
       }
     })
   }
