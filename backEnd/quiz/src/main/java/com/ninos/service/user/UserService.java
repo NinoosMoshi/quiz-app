@@ -1,4 +1,4 @@
-package com.ninos.service;
+package com.ninos.service.user;
 
 import com.ninos.entity.User;
 

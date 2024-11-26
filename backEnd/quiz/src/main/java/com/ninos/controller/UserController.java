@@ -1,7 +1,7 @@
 package com.ninos.controller;
 
 import com.ninos.entity.User;
-import com.ninos.service.UserService;
+import com.ninos.service.user.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
