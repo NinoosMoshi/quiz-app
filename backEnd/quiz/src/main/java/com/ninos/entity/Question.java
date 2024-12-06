@@ -5,23 +5,28 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Entity
-public class Test {
+public class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String title;
-    private String description;
-    private Long time;
 
-    @OneToMany(mappedBy = "test", cascade = CascadeType.ALL)
-    private List<Question> questions;
+    private String questionText;
+
+    private String optionA;
+    private String optionB;
+    private String optionC;
+    private String optionD;
+
+    private String correctOption;
+
+    @ManyToOne
+    @JoinColumn(name = "test_id")
+    private Test test;
 
 }
