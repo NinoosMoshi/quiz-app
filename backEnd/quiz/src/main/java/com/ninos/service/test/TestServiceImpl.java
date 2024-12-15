@@ -12,7 +12,9 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -31,6 +33,7 @@ public class TestServiceImpl implements TestService {
         Test savedTest = testRepository.save(test);
         return testMapper.entityToDto(savedTest);
     }
+
 
     @Override
     public QuestionDTO addQuestionInTest(QuestionDTO questionDTO) {
@@ -51,6 +54,14 @@ public class TestServiceImpl implements TestService {
         }
             throw new EntityNotFoundException("Test not found");
 
+    }
+
+
+    @Override
+    public List<TestDTO> getAllTests() {
+       return testRepository.findAll().stream().peek(
+               test -> test.setTime(test.getQuestions().size() * test.getTime())).collect(Collectors.toList())
+               .stream().map(testMapper::entityToDto).collect(Collectors.toList());
     }
 
 
