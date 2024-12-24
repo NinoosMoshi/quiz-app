@@ -2,6 +2,7 @@ package com.ninos.service.test;
 
 import com.ninos.dto.QuestionDTO;
 import com.ninos.dto.TestDTO;
+import com.ninos.dto.TestDetailsDTO;
 import com.ninos.entity.Question;
 import com.ninos.entity.Test;
 import com.ninos.mapper.QuestionMapper;
@@ -38,7 +39,7 @@ public class TestServiceImpl implements TestService {
     @Override
     public QuestionDTO addQuestionInTest(QuestionDTO questionDTO) {
         Optional<Test> testOptional = testRepository.findById(questionDTO.getId());
-        if(testOptional.isPresent()) {
+        if (testOptional.isPresent()) {
             Question question = new Question();
 
             question.setTest(testOptional.get());
@@ -52,16 +53,32 @@ public class TestServiceImpl implements TestService {
             Question savedQuestion = questionRepository.save(question);
             return questionMapper.entityToDto(savedQuestion);
         }
-            throw new EntityNotFoundException("Test not found");
+        throw new EntityNotFoundException("Test not found");
 
     }
 
 
     @Override
     public List<TestDTO> getAllTests() {
-       return testRepository.findAll().stream().peek(
-               test -> test.setTime(test.getQuestions().size() * test.getTime())).collect(Collectors.toList())
-               .stream().map(testMapper::entityToDto).collect(Collectors.toList());
+        return testRepository.findAll().stream().peek(
+                        test -> test.setTime(test.getQuestions().size() * test.getTime())).collect(Collectors.toList())
+                .stream().map(testMapper::entityToDto).collect(Collectors.toList());
+    }
+
+
+    @Override
+    public TestDetailsDTO getAllQuestionsByTestId(Long testId) {
+        Optional<Test> optionalTest = testRepository.findById(testId);
+        TestDetailsDTO testDetailsDTO = new TestDetailsDTO();
+        if (optionalTest.isPresent()) {
+            TestDTO testDTO = testMapper.entityToDto(optionalTest.get());
+            testDTO.setTime(optionalTest.get().getTime() * optionalTest.get().getQuestions().size());
+
+            testDetailsDTO.setTestDTO(testDTO);
+            testDetailsDTO.setQuestionDTOS(optionalTest.get().getQuestions().stream().map(questionMapper::entityToDto).collect(Collectors.toList()));
+            return testDetailsDTO;
+        }
+        return testDetailsDTO;
     }
 
 

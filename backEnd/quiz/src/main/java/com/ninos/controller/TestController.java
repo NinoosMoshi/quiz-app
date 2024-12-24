@@ -2,7 +2,6 @@ package com.ninos.controller;
 
 import com.ninos.dto.QuestionDTO;
 import com.ninos.dto.TestDTO;
-import com.ninos.entity.Test;
 import com.ninos.service.test.TestService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -43,6 +42,17 @@ public class TestController {
     public ResponseEntity<?> getAllTests() {
         try {
             return new ResponseEntity<>(testService.getAllTests(), HttpStatus.OK);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+    @GetMapping("/{testId}")
+    public ResponseEntity<?> getAllQuestionsByTestId(@PathVariable Long testId) {
+        try {
+            return new ResponseEntity<>(testService.getAllQuestionsByTestId(testId), HttpStatus.OK);
         }
         catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
