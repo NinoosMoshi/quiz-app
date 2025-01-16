@@ -1,14 +1,17 @@
 package com.ninos.service.test;
 
-import com.ninos.dto.QuestionDTO;
-import com.ninos.dto.TestDTO;
-import com.ninos.dto.TestDetailsDTO;
+import com.ninos.dto.*;
 import com.ninos.entity.Question;
 import com.ninos.entity.Test;
+import com.ninos.entity.TestResult;
+import com.ninos.entity.User;
 import com.ninos.mapper.QuestionMapper;
 import com.ninos.mapper.TestMapper;
+import com.ninos.mapper.TestResultMapper;
 import com.ninos.repository.QuestionRepository;
 import com.ninos.repository.TestRepository;
+import com.ninos.repository.TestResultRepository;
+import com.ninos.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,6 +29,12 @@ public class TestServiceImpl implements TestService {
 
     private final QuestionRepository questionRepository;
     private final QuestionMapper questionMapper;
+
+    private final TestResultRepository testResultRepository;
+    private final TestResultMapper testResultMapper;
+
+    private final UserRepository UserRepository;
+    private final UserRepository userRepository;
 
 
     @Override
@@ -79,6 +88,39 @@ public class TestServiceImpl implements TestService {
             return testDetailsDTO;
         }
         return testDetailsDTO;
+    }
+
+
+    @Override
+    public TestResultDTO submitTest(SubmitTestDTO requestDTO) {
+        Test test = testRepository.findById(requestDTO.getTestId())
+                .orElseThrow(() -> new EntityNotFoundException("Test not found"));
+
+        User user = userRepository.findById(requestDTO.getUserId())
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        int correctAnswer = 0;
+        for (QuestionsResponse response : requestDTO.getResponses()) {
+            Question question = questionRepository.findById(response.getQuestionId())
+                    .orElseThrow(() -> new EntityNotFoundException("Question not found"));
+
+            if(question.getCorrectOption().equals(response.getSelectedOption())){
+                correctAnswer++;
+            }
+        }
+
+        int totalQuestions = test.getQuestions().size();
+        double percentage = ((double) correctAnswer / totalQuestions) * 100;
+
+        TestResult testResult = new TestResult();
+        testResult.setTest(test);
+        testResult.setUser(user);
+        testResult.setTotalQuestions(totalQuestions);
+        testResult.setCorrectAnswers(correctAnswer);
+        testResult.setPercentage(percentage);
+
+        TestResult saved = testResultRepository.save(testResult);
+        return testResultMapper.entityToDto(saved);
     }
 
 
