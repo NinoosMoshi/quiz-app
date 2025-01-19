@@ -1,6 +1,7 @@
 package com.ninos.controller;
 
 import com.ninos.dto.QuestionDTO;
+import com.ninos.dto.SubmitTestDTO;
 import com.ninos.dto.TestDTO;
 import com.ninos.service.test.TestService;
 import lombok.AllArgsConstructor;
@@ -54,6 +55,17 @@ public class TestController {
     public ResponseEntity<?> getAllQuestionsByTestId(@PathVariable Long testId) {
         try {
             return new ResponseEntity<>(testService.getAllQuestionsByTestId(testId), HttpStatus.OK);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+    @PostMapping("/submit-test")
+    public ResponseEntity<?> submitTest(@RequestBody SubmitTestDTO submitTestDTO) {
+        try {
+            return new ResponseEntity<>(testService.submitTest(submitTestDTO), HttpStatus.CREATED);
         }
         catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
