@@ -16,6 +16,8 @@ export class TakeTestComponent implements OnInit {
   questions:any[] = [];
   testId:number;
 
+  selectedAnswers:{[key:number]:string} = {};
+
   constructor(private testService:TestService, 
     private activatedRoute:ActivatedRoute,
     private router:Router, 
@@ -30,6 +32,12 @@ export class TakeTestComponent implements OnInit {
         this.questions = res.questionDTOS;
       })
     })
+  }
+
+
+  onAnswerChange(questionId:number, selectedOption:string){
+    this.selectedAnswers[questionId] = selectedOption;
+    console.log(this.selectedAnswers);
   }
 
 
