@@ -21,6 +21,10 @@ export class TestService {
       return this.http.get(`${this.BASIC_URL}/api/test/${testId}`);
     }
 
+    submitTest(submitTestDTO:any):Observable<any>{
+      return this.http.post(`${this.BASIC_URL}/api/test/submit-test`,submitTestDTO);
+    }
+
 
 
 }
