@@ -19,6 +19,8 @@ export class TakeTestComponent implements OnInit {
 
   selectedAnswers:{[key:number]:string} = {};
 
+  timeRemaining: number = 0;
+
   constructor(private testService:TestService, 
     private activatedRoute:ActivatedRoute,
     private router:Router, 
@@ -31,8 +33,17 @@ export class TakeTestComponent implements OnInit {
 
       this.testService.getAllQuestionsInTest(this.testId).subscribe(res=>{
         this.questions = res.questionDTOS;
+
+        console.log(res)
+        this.timeRemaining = res.testDTO.time || 0;
       })
     })
+  }
+
+  getFormattedTime(): string{
+     const minutes = Math.floor(this.timeRemaining / 60);
+     const seconds = this.timeRemaining % 60;
+     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;  // 5:02
   }
 
 
