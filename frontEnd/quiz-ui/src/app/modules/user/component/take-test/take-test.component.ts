@@ -20,7 +20,7 @@ export class TakeTestComponent implements OnInit {
   selectedAnswers:{[key:number]:string} = {};
 
   timeRemaining: number = 0;
-
+  interval: any;
   constructor(private testService:TestService, 
     private activatedRoute:ActivatedRoute,
     private router:Router, 
@@ -36,8 +36,20 @@ export class TakeTestComponent implements OnInit {
 
         console.log(res)
         this.timeRemaining = res.testDTO.time || 0;
+        this.startTimer();
       })
     })
+  }
+
+  startTimer(){
+    this.interval = setInterval(()=>{
+      if(this.timeRemaining > 0){
+        this.timeRemaining--;
+      }else {
+        clearInterval(this.interval);
+        this.submitAnswers();
+      }
+    }, 1000)
   }
 
   getFormattedTime(): string{

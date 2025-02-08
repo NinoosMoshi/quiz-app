@@ -72,4 +72,15 @@ public class TestController {
         }
     }
 
+
+    @GetMapping("test-result")
+    public ResponseEntity<?> getAllTestResults() {
+        try {
+            return new ResponseEntity<>(testService.getAllTestResults(), HttpStatus.OK);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }
