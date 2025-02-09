@@ -30,6 +30,10 @@ export class AdminService {
   getAllQuestionsInTest(testId:number):Observable<any>{
     return this.http.get(`${this.BASIC_URL}/api/test/${testId}`);
   }
+
+  getAllTestResults():Observable<any>{
+    return this.http.get(`${this.BASIC_URL}/api/test/test-result`);
+  }
    
 
 
