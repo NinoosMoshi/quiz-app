@@ -73,10 +73,21 @@ public class TestController {
     }
 
 
-    @GetMapping("test-result")
+    @GetMapping("/test-result")
     public ResponseEntity<?> getAllTestResults() {
         try {
             return new ResponseEntity<>(testService.getAllTestResults(), HttpStatus.OK);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+    @GetMapping("/test-result/{userId}")
+    public ResponseEntity<?> getAllTestResultsByUserId(@PathVariable Long userId) {
+        try {
+            return new ResponseEntity<>(testService.getAllTestResultsOfUser(userId), HttpStatus.OK);
         }
         catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

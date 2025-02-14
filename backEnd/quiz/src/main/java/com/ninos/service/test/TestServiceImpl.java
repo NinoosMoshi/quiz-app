@@ -130,5 +130,12 @@ public class TestServiceImpl implements TestService {
         return results.stream().map(testResultMapper::entityToDto).toList();
     }
 
+    @Override
+    public List<TestResultDTO> getAllTestResultsOfUser(Long userId) {
+        List<TestResult> testResults = testResultRepository.findAllByUserId(userId);
+//        return testResults.stream().map( test -> testResultMapper.entityToDto(test)).toList();
+        return testResults.stream().map(testResultMapper::entityToDto).toList();
+    }
+
 
 }
